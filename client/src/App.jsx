@@ -1,12 +1,16 @@
-import logo from './logo.svg';
+import Home from './components/pages/Home.jsx';
 import './App.css';
-import Cabecalho from './components/Cabecalho.jsx';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Login from './components/pages/Login.jsx';
 
 function App() {
   return (
-    <div>
-      <Cabecalho/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/login' element={<Login/>}/>
+      </Routes>
+    </Router>
   );
 }
 
