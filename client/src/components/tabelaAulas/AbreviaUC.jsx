@@ -1,0 +1,12 @@
+
+
+function AbreviaUC(props) {
+    const materia = (props.materia);
+    const unidade = materia.split(' ');
+    const uc = (unidade[0].substring(0, 4) + '.' + unidade[unidade.length-3])
+    return (
+     uc
+  )
+}
+
+export default AbreviaUC
