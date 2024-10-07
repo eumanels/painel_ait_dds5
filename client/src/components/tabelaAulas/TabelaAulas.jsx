@@ -4,6 +4,7 @@ import AbreviaInstru from "./AbreviaInstru.jsx";
 import AbreviaUC from "./AbreviaUC.jsx";
 import AbreviaAmbiente from "./AbreviaAmbiente.jsx";
 import styles from './TabelaAulas.module.css'
+import { Link } from "react-router-dom";
 
 function TabelaAulas({tipo}) {
     const [aulas, setAulas] = useState([]);
@@ -30,6 +31,29 @@ function TabelaAulas({tipo}) {
             console.log('Erro ao consultar aulas', error);
         }
     }
+    
+    async function deletarAulas(id) {
+        try {
+            const resposta = await fetch(`http://localhost:5000/aulas/${id}`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            });
+
+            if(!resposta.ok){
+                throw new Error('Erro ao deletar aula', JSON.stringify(resposta));
+            }
+            else{
+                setAulas(aulas.filter(aula=>aula.id !== id));
+                alert('Aula Deletada');
+            }
+        } catch (error) {
+            console.debug(error);
+        }
+    }
+    
+    
     return (
         <div className={`${styles.aulas} ${tipo === 'edit'?styles.edit:''}`}>
             <table className={styles.tabelaAulas}>
@@ -55,8 +79,10 @@ function TabelaAulas({tipo}) {
                             <td><AbreviaAmbiente ambientes={aula.ambiente}/></td>
                             {tipo === 'edit' && 
                                 <td>
-                                    <button className="btn btn-warning ms-2">Editar</button>
-                                    <button className="btn btn-danger ms-2">Deletar</button>
+                                    <Link to={`/edit_aula/${aula.id}`} className="btn btn-warning ms-2">Editar</Link>
+                                    <button className="btn btn-danger ms-2" onClick={()=>deletarAulas(aula.id)}>
+                                        Deletar
+                                        </button>
                                 </td>
                             }
                         </tr>
