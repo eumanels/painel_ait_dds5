@@ -4,7 +4,7 @@ import express from 'express';
 import cors from 'cors';
 
 //Importando funções (métodos do controller)
-import { mostrarAulas, criarAula, atualizarAula, excluirAula } from './controllers/AulaController.js';
+import { mostrarAulas, criarAula, atualizarAula, excluirAula, mostrarUmaAula } from './controllers/AulaController.js';
 
 //Chamando função express
 const app = express();
@@ -23,6 +23,7 @@ app.get('/',(req, res)=>{
 
 //Rotas de aulas
 app.get('/aulas', mostrarAulas);
+app.get('/aulas/:id', mostrarUmaAula);
 app.post('/aulas', criarAula);
 app.put('/aulas/:id', atualizarAula);
 app.delete('/aulas/:id', excluirAula);

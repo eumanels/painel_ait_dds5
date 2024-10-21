@@ -2,6 +2,7 @@ import { createAula } from "../models/AulaModel.js";
 import { showAulas } from "../models/AulaModel.js";
 import { updateAula } from "../models/AulaModel.js";
 import { deleteAula } from "../models/AulaModel.js";
+import { showOneAula } from "../models/AulaModel.js";
 
 export async function criarAula(req, res) {
     console.log('AulaController criarAula');
@@ -57,6 +58,19 @@ export async function excluirAula(req, res) {
 
     try {
         const [status, resposta] = await deleteAula(id);
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+}
+
+export async function mostrarUmaAula(req, res) {
+    console.log('AulaController mostrarUmaAula')
+    const {id} = req.params;
+
+    try {
+        const [status, resposta] = await showOneAula(id);
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error);
