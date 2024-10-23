@@ -3,6 +3,7 @@ import { showAulas } from "../models/AulaModel.js";
 import { updateAula } from "../models/AulaModel.js";
 import { deleteAula } from "../models/AulaModel.js";
 import { showOneAula } from "../models/AulaModel.js";
+import { isNullOrEmpty, verificaAula } from "../validations/AulaValidation.js";
 
 export async function criarAula(req, res) {
     console.log('AulaController criarAula');
@@ -13,16 +14,18 @@ export async function criarAula(req, res) {
     //Exibindo corpo da requisição
     console.log(aula);
 
-
-    //Tentando criar aula
-    try {
-        const [status, resposta] = await createAula(aula);
-        res.status(status).json(resposta);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json(error);
+    if (verificaAula(aula)) {
+        res.status(400).json({ message: 'Todas as propiedades devem ser preenchidas' });
+    } else {
+        //Tentando criar aula
+        try {
+            const [status, resposta] = await createAula(aula);
+            res.status(status).json(resposta);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
     }
-
 
 }
 
@@ -41,33 +44,41 @@ export async function mostrarAulas(req, res) {
 export async function atualizarAula(req, res) {
     console.log('AulaController atualizarAula');
     const aula = req.body;
-    const {id} = req.params;
+    const { id } = req.params;
 
-    try {
-        const [status, resposta] = await updateAula(aula, id);
-        res.status(status).json(resposta);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json(error);
+    if (verificaAula(aula) || isNullOrEmpty(id)) {
+        res.status(400).json({ message: 'Todas as propiedades devem ser preenchidas' });
+    } else {
+        try {
+            const [status, resposta] = await updateAula(aula, id);
+            res.status(status).json(resposta);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
     }
 }
 
 export async function excluirAula(req, res) {
     console.log('AulaController excluirAula');
-    const {id} = req.params;
+    const { id } = req.params;
 
-    try {
-        const [status, resposta] = await deleteAula(id);
-        res.status(status).json(resposta);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json(error);
+    if (isNullOrEmpty(id)) {
+        res.status(400).json({ message: 'O ID deve ser informado!' });
+    } else {
+        try {
+            const [status, resposta] = await deleteAula(id);
+            res.status(status).json(resposta);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
     }
 }
 
 export async function mostrarUmaAula(req, res) {
     console.log('AulaController mostrarUmaAula')
-    const {id} = req.params;
+    const { id } = req.params;
 
     try {
         const [status, resposta] = await showOneAula(id);

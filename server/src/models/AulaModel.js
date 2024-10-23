@@ -92,7 +92,10 @@ export async function updateAula(aula, id) {
     try {
         const [retorno] = await conexao.query(sql, params);
         console.log('Atualizando aulas');
-        return[200, retorno]
+        if(retorno.affectedRows < 1){
+            return [404,{message: 'Aula não encontrada'}];
+        }
+        return[200, {message: 'Aula Atualizada'}]
     } catch (error) {
         console.log(error);
         return[500, error];
@@ -109,7 +112,10 @@ export async function deleteAula(id) {
     try {
         const [retorno] = await conexao.query(sql, params);
         console.log('Deletando aula');
-        return[200, retorno]
+        if(retorno.affectedRows < 1){
+            return [404, {message: "Aula não encontrada"}];
+        }
+        return[200, {message: "Aula excluida"}];
     } catch (error) {
         console.log(error);
         return[500, error];
